@@ -2,10 +2,6 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -19,60 +15,49 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Kingpin API!
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
 # Authentication
 
-> To authorize, use this code:
+## GraphQL mutation 
 
-```ruby
-require 'kittn'
+To authorize, you need to get authentication token from GraphQL mutation sign_in. 
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+
+> GraphQL sign_in mutation response:
+
+```json
+{
+  "data": {
+    "sign_in": {
+      "id": "14",
+      "name": "Farahhhh",
+      "token": "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZhcmFoczAyQGdtYWlsLmNvbSIsImV4cCI6MTkwMTI2NjE4NX0.-sdBaSGju0k8T8CuEEx3iY4aCk5iyTVWFQfih9V5HOI"
+    }
+  }
+}
 ```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
+Make sure to replace `token` with from 'token' key that you get from GraphQL sign_in response.
+.
 Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`Authorization: Bearer {token}`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>{token}</code> with token from GraphQL mutation sign_in response.
 </aside>
 
-# Kittens
 
-## Get All Kittens
+# Photos
 
-```ruby
+## Uploading Photos
+
+<!-- ```ruby
 require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+api = Kittn::APIClient.authorize!('Bearer {token}')
 api.kittens.get
 ```
 
@@ -93,40 +78,30 @@ const kittn = require('kittn');
 
 let api = kittn.authorize('meowmeowmeow');
 let kittens = api.kittens.get();
-```
+``` -->
 
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+{
+  "data": {
+    "message": "You have successfully uploaded your profile photo!",
+    "img_url": "/attachments/02050d1e36ac38f6825b1ba565ca4bdb0f947d56/store/fill/100/100/1d30ea228ee32bbcd3374722fb0c7f0423acc4719f90f01e509ce29387a9/profile_image"
   }
-]
+}
 ```
 
-This endpoint retrieves all kittens.
+This endpoint uploads user's profile photo
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST http://kingpin-dev.eba-5qmbv3ry.ap-southeast-1.elasticbeanstalk.com/photos/upload`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
+photo[profile_image] | - | Attachment to show user's profile photo
 available | true | If set to false, the result will include kittens that have already been adopted.
 
 <aside class="success">
